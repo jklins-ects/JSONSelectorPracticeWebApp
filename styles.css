@@ -1,0 +1,151 @@
+body {
+    font-family: system-ui, Arial, sans-serif;
+    margin: 20px;
+    line-height: 1.35;
+}
+h1 {
+    margin: 0 0 10px;
+}
+.row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 14px;
+    background: #fff;
+}
+.card h2 {
+    font-size: 16px;
+    margin: 0 0 10px;
+}
+.grow {
+    flex: 1 1 420px;
+}
+.controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* nicer radio labels */
+.controls label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+input[type="text"] {
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    min-width: 280px;
+}
+button {
+    padding: 8px 12px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #f5f5f5;
+    cursor: pointer;
+}
+button:hover {
+    background: #eee;
+}
+.status {
+    margin-top: 8px;
+    font-weight: 600;
+}
+.status.good {
+    color: #0a7a2f;
+}
+.status.bad {
+    color: #b00020;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+th {
+    background: #f7f7f7;
+}
+.small {
+    font-size: 12px;
+    color: #555;
+}
+.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* JSON display area (used for BOTH raw + tree) */
+.json-view {
+    background: #0b1020;
+    color: #e7eefc;
+    padding: 12px;
+    border-radius: 10px;
+    overflow: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    white-space: pre; /* raw JSON preserves indentation */
+}
+
+/* JSON tree viewer */
+.json-view details {
+    margin-left: 16px;
+    white-space: normal;
+}
+.json-view summary {
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+}
+.json-view .k {
+    color: #9ccaff;
+}
+.json-view .str {
+    color: #9effa3;
+}
+.json-view .num {
+    color: #ffd18a;
+}
+.json-view .bool {
+    color: #ff9cf4;
+}
+.json-view .null {
+    color: #c2c2c2;
+}
+.json-view .comma {
+    color: #7c8bb0;
+}
+
+/* Highlight target primitive */
+.target-highlight {
+    background: rgba(255, 230, 0, 0.25);
+    outline: 2px solid rgba(255, 230, 0, 0.55);
+    border-radius: 6px;
+    padding: 1px 3px;
+}
+
+/* Sticky right panel so the selector input stays visible */
+#rightPanel {
+    position: sticky;
+    top: 12px; /* space from top when scrolling */
+    align-self: flex-start; /* important for sticky inside flex layouts */
+}
+
+/* On small screens, disable sticky so it doesn't get awkward */
+@media (max-width: 900px) {
+    #rightPanel {
+        position: static;
+    }
+}

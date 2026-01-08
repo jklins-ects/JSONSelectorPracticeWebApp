@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>JSON Primitive Selector Practice</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <h1>JSON Primitive Selector Practice</h1>
+        <p class="small">
+            Paste a URL that returns JSON (must allow CORS). You’ll be shown a
+            random primitive value; enter the selector path for it.
+            <br />
+            <strong>
+                Assume the json is stored in a variable called <em>data</em>
+            </strong>
+            <br />
+            Selector format examples:
+            <span class="mono">data.user.name</span>,
+            <span class="mono">data["items"][0]["tags"][1]</span>,
+            <span class="mono">data.items[0].tags[1]</span>
+        </p>
+
+        <div class="row">
+            <div class="card grow">
+                <h2>Load JSON</h2>
+                <div class="controls">
+                    <input
+                        id="urlInput"
+                        type="text"
+                        placeholder="https://example.com/data.json"
+                    />
+                    <button id="loadBtn">Load URL</button>
+                    <button id="resetBtn">Reset to Default</button>
+                </div>
+                <div class="small" style="margin-top: 8px">
+                    Current Source:
+                    <span id="currentSource" class="mono"></span>
+                </div>
+
+                <h2 style="margin-top: 14px">Displayed JSON</h2>
+
+                <div class="controls" style="margin-bottom: 8px">
+                    <label class="small">
+                        <input
+                            type="radio"
+                            name="viewMode"
+                            id="modeRaw"
+                            value="raw"
+                            checked
+                        />
+                        Raw
+                    </label>
+
+                    <label class="small">
+                        <input
+                            type="radio"
+                            name="viewMode"
+                            id="modeCollapsible"
+                            value="collapsible"
+                        />
+                        Collapsible
+                    </label>
+
+                    <button
+                        id="toggleAllBtn"
+                        type="button"
+                        class="small"
+                        style="display: none"
+                    >
+                        Collapse All
+                    </button>
+                </div>
+
+                <div id="jsonDisplay" class="json-view"></div>
+            </div>
+
+            <div class="card grow" id="rightPanel">
+                <h2>Find the Selector</h2>
+                <div class="small">
+                    Target primitive value (<strong>
+                        assume it's in a variable called <em>data</em></strong
+                    >):
+                </div>
+
+                <div
+                    id="targetValue"
+                    class="mono"
+                    style="font-size: 18px; margin: 6px 0 10px"
+                ></div>
+
+                <div class="controls">
+                    <input
+                        id="selectorInput"
+                        type="text"
+                        placeholder='Enter selector (e.g., data.user.name or data["items"][0].id)'
+                    />
+                    <button id="checkBtn">Check</button>
+                    <button id="skipBtn">Skip</button>
+                </div>
+
+                <div id="feedback" class="status" aria-live="polite"></div>
+
+                <div class="small" style="margin-top: 10px">
+                    Primitives found:
+                    <span id="primitiveCount" class="mono"></span>
+                </div>
+
+                <h2 style="margin-top: 14px">Correct Answers Log</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>Target</th>
+                            <th>Selector</th>
+                            <th># Guesses</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <script src="app.js"></script>
+    </body>
+</html>
