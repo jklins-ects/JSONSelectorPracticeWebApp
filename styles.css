@@ -86,7 +86,9 @@ th {
 .mono {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
-
+#targetValue {
+    background-color: yellow;
+}
 /* JSON display area (used for BOTH raw + tree) */
 .json-view {
     background: #0b1020;
@@ -97,6 +99,16 @@ th {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 13px;
     white-space: pre; /* raw JSON preserves indentation */
+    max-width: 45vw; /* no wider than half the screen */
+    overflow-wrap: anywhere; /* break long strings safely */
+    word-break: break-word; /* fallback for older browsers */
+}
+
+/* Let it expand normally on smaller screens */
+@media (max-width: 900px) {
+    .json-view {
+        max-width: 100%;
+    }
 }
 
 /* JSON tree viewer */
@@ -128,6 +140,41 @@ th {
     color: #7c8bb0;
 }
 
+/* Force uniform column widths */
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* Truncate overflowing cell content with ellipsis */
+th,
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Optional: set relative column widths */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 30%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    width: 25%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 30%;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+    width: 15%;
+}
+
 /* Highlight target primitive */
 .target-highlight {
     background: rgba(255, 230, 0, 0.25);
@@ -141,6 +188,11 @@ th {
     position: sticky;
     top: 12px; /* space from top when scrolling */
     align-self: flex-start; /* important for sticky inside flex layouts */
+    overflow: auto;
+}
+
+#rightPanel strong {
+    color: red;
 }
 
 /* On small screens, disable sticky so it doesn't get awkward */

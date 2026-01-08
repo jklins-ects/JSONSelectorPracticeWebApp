@@ -456,15 +456,19 @@ function addLogRow({ url, target, selector, guesses }) {
 
     const tdUrl = document.createElement("td");
     tdUrl.textContent = url;
+    tdUrl.title = url;
 
     const tdTarget = document.createElement("td");
     tdTarget.textContent = target;
+    tdTarget.title = target;
 
     const tdSelector = document.createElement("td");
     tdSelector.textContent = selector;
+    tdSelector.title = selector;
 
     const tdGuesses = document.createElement("td");
     tdGuesses.textContent = guesses;
+    tdGuesses.title = guesses;
 
     tr.appendChild(tdUrl);
     tr.appendChild(tdTarget);
