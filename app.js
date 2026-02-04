@@ -327,7 +327,7 @@ function highlightPath(container, path) {
     clearHighlight(container);
 
     const targetEl = container.querySelector(
-        `[data-path="${CSS.escape(path)}"]`
+        `[data-path="${CSS.escape(path)}"]`,
     );
     if (!targetEl) return;
 
@@ -373,7 +373,9 @@ let data = DEFAULT_JSON;
 let currentSource = DEFAULT_SOURCE;
 
 let primitiveValues = [];
-let primitivesWithPaths = [];
+let primitivesWithPaths = []; // remaining challenges
+let totalPrimitiveCount = 0; // original total
+let foundCount = 0; // how many user has found
 let currentChallenge = null;
 let guessCount = 0;
 
@@ -419,7 +421,8 @@ function formatPrimitiveForDisplay(v) {
 function pickRandomChallenge() {
     if (!primitivesWithPaths.length) {
         currentChallenge = null;
-        targetValueEl.textContent = "(no primitive values found)";
+        targetValueEl.textContent = "🎉 All primitives found!";
+        setFeedback("Nice work — you found them all.", true);
         return;
     }
 
@@ -430,7 +433,7 @@ function pickRandomChallenge() {
     setFeedback("", false);
 
     targetValueEl.textContent = formatPrimitiveForDisplay(
-        currentChallenge.value
+        currentChallenge.value,
     );
 
     if (viewMode === "collapsible") {
@@ -442,9 +445,12 @@ function refreshFromCurrentJson() {
     updateSourceLabel();
 
     primitiveValues = extractPrimitives(data);
-    primitiveCountEl.textContent = primitiveValues.length;
 
     primitivesWithPaths = collectPrimitivePaths(data);
+    totalPrimitiveCount = primitivesWithPaths.length;
+    foundCount = 0;
+
+    primitiveCountEl.textContent = `(0 / ${totalPrimitiveCount})`;
 
     renderJson(jsonDisplay, data);
 
@@ -513,14 +519,8 @@ modeRaw.addEventListener("change", () => {
 // -------------------------
 // Loading JSON from URL
 // -------------------------
-async function loadJsonFromUrl(url) {
-    const res = await fetch(url, { method: "GET" });
-    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-    return await res.json();
-}
 
-loadBtn.addEventListener("click", async () => {
-    const url = urlInput.value.trim();
+async function handleURL(url) {
     if (!url) return;
 
     setFeedback("Loading JSON...", true);
@@ -534,10 +534,21 @@ loadBtn.addEventListener("click", async () => {
     } catch (err) {
         setFeedback(
             "Could not load that URL. Common issues: invalid JSON, blocked by CORS, or the URL requires auth.",
-            false
+            false,
         );
         console.error(err);
     }
+}
+
+async function loadJsonFromUrl(url) {
+    const res = await fetch(url, { method: "GET" });
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    return await res.json();
+}
+
+loadBtn.addEventListener("click", async () => {
+    const url = urlInput.value.trim();
+    handleURL(url);
 });
 
 resetBtn.addEventListener("click", () => {
@@ -593,6 +604,14 @@ checkBtn.addEventListener("click", () => {
         guesses: guessCount,
     });
 
+    // Remove this primitive from future challenges
+    primitivesWithPaths = primitivesWithPaths.filter(
+        (p) => p.path !== currentChallenge.path,
+    );
+
+    foundCount++;
+    primitiveCountEl.textContent = `(${foundCount} / ${totalPrimitiveCount})`;
+
     pickRandomChallenge();
 });
 
@@ -612,4 +631,11 @@ urlInput.addEventListener("keydown", (e) => {
 // -------------------------
 // Initialize
 // -------------------------
-refreshFromCurrentJson();
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+let url = urlParams.get("json");
+if (url) {
+    handleURL(url);
+} else {
+    refreshFromCurrentJson();
+}
